@@ -241,20 +241,20 @@ Supabase PostgreSQL
 
 ## Conceitos de Sistemas Distribuídos - Monitoria
 
-Componentes: Quais partes independentes existem ? 
+Componentes: Quais partes independentes existem ?. 
 -Temos frontend, backend, serviço de autenticação e banco de dados como componentes separados. Eles podem executar independentemente e se comunicam pela rede.
 
-Compartilhamento: O que é compartilhamento?
+Compartilhamento: O que é compartilhamento?.
 -São compartilhados os serviços do sistema, como API, autenticação e banco de dados. Os usuários usam a mesma infraestrutura, mas cada um acessa somente suas próprias tarefas.
 
-Tipo de SD: Computação, informação, pervasivo ou combianação?
+Tipo de SD: Computação, informação, pervasivo ou combianação?.
 -Classificamos como um Sistema Distribuído de Informação, porque diferentes componentes trabalham juntos para armazenar, consultar e gerenciar dados de usuários e tarefas.
 
-Transparencia: O que o usuário não precisa saber ?
+Transparencia: O que o usuário não precisa saber ?.
 -A distribuição é transparente para o usuário. Ele não precisa saber onde estão o backend, banco ou autenticação; ele interage com tudo como se fosse uma única aplicação.
 
-Escalabilidade: Como cresceria ?
+Escalabilidade: Como cresceria ?.
 -Se o número de usuários aumentar, podemos criar várias instâncias do backend e distribuir as requisições entre elas. O banco e a infraestrutura do Supabase também podem ser dimensionados conforme o crescimento.
 
-Falha: O que acontece se um componente parar ?
+Falha: O que acontece se um componente parar ?.
 -A falha de um componente pode afetar apenas determinada parte do sistema. Se a autenticação cair, por exemplo, o login deixa de funcionar; se o banco cair, as tarefas não podem ser consultadas. Como os componentes são separados, a falha de um deles não significa necessariamente que todos os outros também pararam.
