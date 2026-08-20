@@ -213,23 +213,29 @@ A chave secreta utilizada pelo backend deve permanecer exclusivamente no servido
 
 ## EStrutura da Arquitetura em camadas
 
-Apresentação
+Apresentação 
+
     ↓
 React + Vite
 
+
 API
-    ↓
+
+    ↓  
 FastAPI
 
 Regras de negócio / autorização
+    
     ↓
 Backend
 
 Autenticação
+    
     ↓
 Supabase Auth
 
 Persistência
+    
     ↓
 Supabase PostgreSQL
 
