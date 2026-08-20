@@ -12,12 +12,19 @@ function Cabecalho({ emailUsuario }) {
   return (
     <header className="cabecalho">
       <div className="cabecalho-conteudo">
-        <strong className="cabecalho-logo">
-          Tarefas
-        </strong>
+        <div className="cabecalho-marca">
+          <span className="cabecalho-logo-icone">✓</span>
+          <strong className="cabecalho-logo">Tarefas</strong>
+        </div>
 
         <div className="cabecalho-usuario">
-          <span>{emailUsuario}</span>
+          <div className="usuario-avatar">
+            {emailUsuario?.charAt(0).toUpperCase()}
+          </div>
+
+          <span className="usuario-email">
+            {emailUsuario}
+          </span>
 
           <button
             className="botao-sair"

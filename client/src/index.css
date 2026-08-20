@@ -709,3 +709,117 @@ button {
   text-align: center;
   color: #606575;
 }
+
+/* Cabeçalho */
+
+.cabecalho {
+  width: 100%;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e4e7ef;
+}
+
+.cabecalho-conteudo {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cabecalho-marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cabecalho-logo-icone {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #0b57d0;
+  border-radius: 50%;
+
+  color: #0b57d0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.cabecalho-logo {
+  color: #1f2430;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.cabecalho-usuario {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.usuario-avatar {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background-color: #e8f0fe;
+  color: #0b57d0;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.usuario-email {
+  color: #4f5665;
+  font-size: 14px;
+}
+
+.botao-sair {
+  padding: 8px 14px;
+
+  border: 1px solid #d8dce5;
+  border-radius: 7px;
+
+  background-color: #ffffff;
+  color: #3d4350;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}
+
+.botao-sair:hover {
+  background-color: #f5f7fb;
+  border-color: #bfc5d2;
+}
+
+/* Responsividade do cabeçalho */
+
+@media (max-width: 600px) {
+  .cabecalho-conteudo {
+    padding: 14px 18px;
+  }
+
+  .usuario-email {
+    display: none;
+  }
+
+  .cabecalho-logo {
+    font-size: 18px;
+  }
+}
