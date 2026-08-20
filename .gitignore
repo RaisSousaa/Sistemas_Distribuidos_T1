@@ -7,11 +7,6 @@
 .env.*
 !.env.example
 
-# Python
-__pycache__/
-*.py[cod]
-.venv/
-venv/
 
 # Node / React
 node_modules/
@@ -20,3 +15,16 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
+
+# Python
+server/venv/
+server/.venv/
+__pycache__/
+*.pyc
+
+# Ambientes
+.env
+.env.local
+
+# Node
+node_modules/
