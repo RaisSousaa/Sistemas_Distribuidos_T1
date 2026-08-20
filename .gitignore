@@ -1,22 +1,41 @@
-# VS Code
-*.code-workspace
-.vscode/
-
 # Environment variables
 .env
 .env.*
 !.env.example
 
-# Python
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-
 # Node / React
 node_modules/
 dist/
+dist-ssr/
+*.local
 
-# OS
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# VS Code / IDEs
+*.code-workspace
+.vscode/
+.idea/
+
+# Operating System
 .DS_Store
 Thumbs.db
+
+# Visual Studio
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
