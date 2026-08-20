@@ -703,3 +703,9 @@ button {
     padding: 30px 22px;
   }
 }
+
+.carregando-tarefas {
+  padding: 50px 20px;
+  text-align: center;
+  color: #606575;
+}

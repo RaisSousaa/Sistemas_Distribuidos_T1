@@ -1,36 +1,68 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Cabecalho from "../components/Cabecalho";
 import Modal from "../components/Modal";
 import TarefaCard from "../components/TarefaCard";
 import TarefaForm from "../components/TarefaForm";
 
-import { tarefasMock } from "../data/tarefasMock";
+import {
+  listarTarefas,
+  criarTarefa,
+} from "../services/api";
 
 function Tarefas({ usuario }) {
   const [modalAberto, setModalAberto] = useState(false);
-  const [tarefas, setTarefas] = useState(tarefasMock);
+  const [tarefas, setTarefas] = useState([]);
+  const [carregandoTarefas, setCarregandoTarefas] = useState(true);
   const [tarefaEmEdicao, setTarefaEmEdicao] = useState(null);
   const [tarefaParaExcluir, setTarefaParaExcluir] = useState(null);
   const [mensagemSucesso, setMensagemSucesso] = useState("");
   const [mensagemErro, setMensagemErro] = useState("");
 
-  function adicionarTarefa(novaTarefa) {
-    
-    const tarefaCompleta = {
-      ...novaTarefa,
-      id: crypto.randomUUID(),
-      criado_em: new Date().toISOString(),
-    };
+  useEffect(() => {
+    async function carregarTarefas() {
+      try {
+        setCarregandoTarefas(true);
 
-    setTarefas((tarefasAtuais) => [
-      tarefaCompleta,
-      ...tarefasAtuais,
-    ]);
+        const dados = await listarTarefas();
 
-    setModalAberto(false);
+        setTarefas(dados);
+      } catch (erro) {
+        console.error("Erro ao carregar tarefas:", erro);
 
-    mostrarMensagemSucesso("Tarefa criada com sucesso.");
+        mostrarMensagemErro(
+          erro.message || "Não foi possível carregar as tarefas."
+        );
+      } finally {
+        setCarregandoTarefas(false);
+      }
+    }
+
+    carregarTarefas();
+  }, []);
+
+
+  async function adicionarTarefa(novaTarefa) {
+    try {
+      const tarefaCriada = await criarTarefa(novaTarefa);
+
+      setTarefas((tarefasAtuais) => [
+        tarefaCriada,
+        ...tarefasAtuais,
+      ]);
+
+      setModalAberto(false);
+
+      mostrarMensagemSucesso(
+        "Tarefa criada com sucesso."
+      );
+    } catch (erro) {
+      console.error("Erro ao criar tarefa:", erro);
+
+      mostrarMensagemErro(
+        erro.message || "Não foi possível criar a tarefa."
+      );
+    }
   }
 
   function abrirEdicao(tarefa) {
@@ -113,7 +145,11 @@ function Tarefas({ usuario }) {
           </button>
         </div>
 
-        {tarefas.length === 0 ? (
+        {carregandoTarefas ? (
+          <div className="carregando-tarefas">
+            Carregando tarefas...
+          </div>
+        ) : tarefas.length === 0 ? (
           <div className="estado-vazio">
             <div className="estado-vazio-icone">✓</div>
 
