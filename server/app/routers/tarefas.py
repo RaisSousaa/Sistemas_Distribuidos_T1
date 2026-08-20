@@ -26,17 +26,18 @@ def listar_tarefas(user_id: str = Depends(get_current_user)):
 def obter_tarefa(tarefa_id: UUID, user_id: str = Depends(get_current_user)):
     response = supabase.table("tarefas").select("*").eq("id", str(tarefa_id)).eq("usuario_id", user_id).execute()
     if not response.data:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tarefa não encontrada.")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tarefa nao encontrada")
     return response.data[0]
 
-@router.put("/{tarefa_id}", response_model=TarefaResponse)
+# AJUSTADO PARA PATCH CONFORME O CONTRATO
+@router.patch("/{tarefa_id}", response_model=TarefaResponse)
 def atualizar_tarefa(tarefa_id: UUID, tarefa: TarefaUpdate, user_id: str = Depends(get_current_user)):
     dados_atualizacao = {k: v for k, v in tarefa.model_dump().items() if v is not None}
     if "data_limite" in dados_atualizacao:
         dados_atualizacao["data_limite"] = str(dados_atualizacao["data_limite"])
 
     if not dados_atualizacao:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Nenhum dado informado para atualização.")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Nenhum dado informado para atualizacao.")
 
     response = (
         supabase.table("tarefas")
@@ -46,7 +47,7 @@ def atualizar_tarefa(tarefa_id: UUID, tarefa: TarefaUpdate, user_id: str = Depen
         .execute()
     )
     if not response.data:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tarefa não encontrada ou não autorizada.")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tarefa nao encontrada")
     return response.data[0]
 
 @router.delete("/{tarefa_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -59,5 +60,5 @@ def deletar_tarefa(tarefa_id: UUID, user_id: str = Depends(get_current_user)):
         .execute()
     )
     if not response.data:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tarefa não encontrada ou não autorizada.")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tarefa nao encontrada")
     return None

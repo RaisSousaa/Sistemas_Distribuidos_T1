@@ -3,7 +3,6 @@ from enum import Enum
 from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel, ConfigDict
-#biblioteca que garante que os dados estejam no formato correto, e que o frontend envie os dados corretos para a API. 
 
 class PrioridadeEnum(str, Enum):
     baixa = "baixa"
@@ -15,7 +14,7 @@ class StatusEnum(str, Enum):
     em_andamento = "em_andamento"
     concluida = "concluida"
 
-# O que o frontend envia no POST
+# Dados recebidos na criação (POST)
 class TarefaCreate(BaseModel):
     titulo: str
     descricao: str
@@ -23,7 +22,7 @@ class TarefaCreate(BaseModel):
     prioridade: PrioridadeEnum
     status: StatusEnum
 
-# O que o frontend pode enviar no PUT
+# Dados recebidos na atualização parcial (PATCH)
 class TarefaUpdate(BaseModel):
     titulo: Optional[str] = None
     descricao: Optional[str] = None
@@ -31,10 +30,9 @@ class TarefaUpdate(BaseModel):
     prioridade: Optional[PrioridadeEnum] = None
     status: Optional[StatusEnum] = None
 
-# O que a API devolve (inclui campos gerados pelo backend/banco)
+# Resposta enviada ao frontend (sem expor usuario_id)
 class TarefaResponse(BaseModel):
     id: UUID
-    usuario_id: UUID
     titulo: str
     descricao: str
     data_limite: date
@@ -43,5 +41,3 @@ class TarefaResponse(BaseModel):
     criado_em: datetime
 
     model_config = ConfigDict(from_attributes=True)
-
-#aqui é definido a estrutura dos dados 

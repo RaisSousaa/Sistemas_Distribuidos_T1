@@ -237,7 +237,7 @@ Supabase Auth
 Persistência
     
     ↓
-Supabase PostgreSQL
+Shttps://github.com/RaisSousaa/Sistemas_Distribuidos_T1/pull/3/conflict?name=README.md&base_oid=3d6ecc02b84660aeba656b99407c035ef0777ebb&head_oid=75d50160549b300fdae48dfcbcf55fe1c0a66976upabase PostgreSQL
 
 ## Conceitos de Sistemas Distribuídos - Monitoria
 
