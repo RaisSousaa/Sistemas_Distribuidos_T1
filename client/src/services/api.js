@@ -1,13 +1,34 @@
+import { supabase } from "./supabase";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
-async function requisicao(endpoint, opcoes = {}, token = null) {
+async function obterToken() {
+  const {
+    data: { session },
+    error,
+  } = await supabase.auth.getSession();
+
+  if (error) {
+    throw new Error("Não foi possível recuperar a sessão.");
+  }
+
+  if (!session?.access_token) {
+    throw new Error("Usuário não autenticado.");
+  }
+
+  return session.access_token;
+}
+
+async function requisicao(endpoint, opcoes = {}) {
+  const token = await obterToken();
+
   const headers = {
-    "Content-Type": "application/json",
     ...opcoes.headers,
+    Authorization: `Bearer ${token}`,
   };
 
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
+  if (opcoes.body) {
+    headers["Content-Type"] = "application/json";
   }
 
   const resposta = await fetch(`${API_URL}${endpoint}`, {
@@ -16,13 +37,13 @@ async function requisicao(endpoint, opcoes = {}, token = null) {
   });
 
   if (!resposta.ok) {
-    let mensagem = "Ocorreu um erro na comunicação com o servidor.";
+    let mensagem = "Erro na comunicação com o servidor.";
 
     try {
-      const erro = await resposta.json();
+      const dadosErro = await resposta.json();
 
-      if (erro.detail) {
-        mensagem = erro.detail;
+      if (dadosErro.detail) {
+        mensagem = dadosErro.detail;
       }
     } catch {
       // Mantém a mensagem padrão.
@@ -38,44 +59,28 @@ async function requisicao(endpoint, opcoes = {}, token = null) {
   return resposta.json();
 }
 
-export function listarTarefas(token) {
-  return requisicao(
-    "/tarefas",
-    {
-      method: "GET",
-    },
-    token
-  );
+export function listarTarefas() {
+  return requisicao("/tarefas", {
+    method: "GET",
+  });
 }
 
-export function criarTarefa(tarefa, token) {
-  return requisicao(
-    "/tarefas",
-    {
-      method: "POST",
-      body: JSON.stringify(tarefa),
-    },
-    token
-  );
+export function criarTarefa(tarefa) {
+  return requisicao("/tarefas", {
+    method: "POST",
+    body: JSON.stringify(tarefa),
+  });
 }
 
-export function atualizarTarefa(id, tarefa, token) {
-  return requisicao(
-    `/tarefas/${id}`,
-    {
-      method: "PATCH",
-      body: JSON.stringify(tarefa),
-    },
-    token
-  );
+export function atualizarTarefa(id, tarefa) {
+  return requisicao(`/tarefas/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(tarefa),
+  });
 }
 
-export function excluirTarefaApi(id, token) {
-  return requisicao(
-    `/tarefas/${id}`,
-    {
-      method: "DELETE",
-    },
-    token
-  );
+export function excluirTarefaApi(id) {
+  return requisicao(`/tarefas/${id}`, {
+    method: "DELETE",
+  });
 }

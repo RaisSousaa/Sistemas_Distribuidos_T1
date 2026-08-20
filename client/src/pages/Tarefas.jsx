@@ -7,7 +7,7 @@ import TarefaForm from "../components/TarefaForm";
 
 import { tarefasMock } from "../data/tarefasMock";
 
-function Tarefas() {
+function Tarefas({ usuario }) {
   const [modalAberto, setModalAberto] = useState(false);
   const [tarefas, setTarefas] = useState(tarefasMock);
   const [tarefaEmEdicao, setTarefaEmEdicao] = useState(null);
@@ -81,7 +81,7 @@ function Tarefas() {
 
   return (
     <>
-      <Cabecalho />
+      <Cabecalho emailUsuario={usuario.email} />
 
       <main className="pagina-tarefas">
         <div className="tarefas-cabecalho">

@@ -62,7 +62,7 @@ function App() {
     );
   }
 
-  return <Tarefas />;
+  return <Tarefas usuario={usuario} />;
 }
 
 export default App;
