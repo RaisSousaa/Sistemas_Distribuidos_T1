@@ -1,24 +1,41 @@
 import { useState } from "react";
+import { supabase } from "../services/supabase";
 
-function Login({ aoEntrar, aoCadastrar }) {
+function Login({ aoCadastrar }) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [erro, setErro] = useState("");
 
-  function handleSubmit(evento) {
-    evento.preventDefault();
+    async function handleSubmit(evento) {
+        evento.preventDefault();
 
-    setErro("");
+        setErro("");
 
-    if (!email.trim() || !senha.trim()) {
-      setErro("Preencha o e-mail e a senha.");
-      return;
+        if (!email.trim() || !senha.trim()) {
+            setErro("Preencha o e-mail e a senha.");
+            return;
+        }
+
+        try {
+            const { error } =
+            await supabase.auth.signInWithPassword({
+                email: email,
+                password: senha,
+            });
+
+            if (error) {
+            throw error;
+            }
+
+        } catch (error) {
+            console.error(error);
+
+            setErro(
+            "E-mail ou senha inválidos."
+            );
+        }
     }
-
-    // Login temporário enquanto o Supabase ainda não está integrado.
-    aoEntrar(email);
-  }
 
   return (
     <main className="pagina-login">

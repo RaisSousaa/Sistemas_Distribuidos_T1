@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { supabase } from "../services/supabase";
+
 function Cadastro({ aoCadastrar, aoVoltarLogin }) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -8,23 +10,42 @@ function Cadastro({ aoCadastrar, aoVoltarLogin }) {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [erro, setErro] = useState("");
 
-  function handleSubmit(evento) {
-    evento.preventDefault();
+  async function handleSubmit(evento) {
+  evento.preventDefault();
 
-    setErro("");
+  setErro("");
 
-    if (!email.trim() || !senha.trim() || !confirmarSenha.trim()) {
-      setErro("Preencha todos os campos.");
-      return;
-    }
-
-    if (senha !== confirmarSenha) {
-      setErro("As senhas não coincidem.");
-      return;
-    }
-
-    aoCadastrar(email);
+  if (!email.trim() || !senha.trim() || !confirmarSenha.trim()) {
+    setErro("Preencha todos os campos.");
+    return;
   }
+
+  if (senha !== confirmarSenha) {
+    setErro("As senhas não coincidem.");
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: senha,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    console.log("Usuário criado:", data.user);
+
+    aoCadastrar();
+  } catch (error) {
+    console.error(error);
+
+    setErro(
+      error.message || "Não foi possível realizar o cadastro."
+    );
+  }
+}
 
   return (
     <main className="pagina-login">
