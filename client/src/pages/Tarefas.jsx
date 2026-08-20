@@ -8,6 +8,8 @@ import TarefaForm from "../components/TarefaForm";
 import {
   listarTarefas,
   criarTarefa,
+  atualizarTarefa,
+  excluirTarefaApi,
 } from "../services/api";
 
 function Tarefas({ usuario }) {
@@ -70,29 +72,68 @@ function Tarefas({ usuario }) {
     setModalAberto(true);
   }
 
-  function editarTarefa(tarefaAtualizada) {
-    setTarefas((tarefasAtuais) =>
-      tarefasAtuais.map((tarefa) =>
-        tarefa.id === tarefaAtualizada.id
-          ? tarefaAtualizada
-          : tarefa
-      )
+  async function editarTarefa(tarefaAtualizada) {
+    try {
+      const dadosAtualizacao = {
+      titulo: tarefaAtualizada.titulo,
+      descricao: tarefaAtualizada.descricao,
+      data_limite: tarefaAtualizada.data_limite,
+      prioridade: tarefaAtualizada.prioridade,
+      status: tarefaAtualizada.status,
+    };
+
+    const tarefaSalva = await atualizarTarefa(
+      tarefaAtualizada.id,
+      dadosAtualizacao
     );
 
-    setTarefaEmEdicao(null);
-    setModalAberto(false);
+      setTarefas((tarefasAtuais) =>
+        tarefasAtuais.map((tarefa) =>
+          tarefa.id === tarefaSalva.id
+            ? tarefaSalva
+            : tarefa
+        )
+      );
 
-    mostrarMensagemSucesso("Tarefa atualizada com sucesso.");
+      setTarefaEmEdicao(null);
+      setModalAberto(false);
+
+      mostrarMensagemSucesso(
+        "Tarefa atualizada com sucesso."
+      );
+    } catch (erro) {
+      console.error("Erro ao atualizar tarefa:", erro);
+
+      mostrarMensagemErro(
+        erro.message || "Não foi possível atualizar a tarefa."
+      );
+    }
   }
-  function excluirTarefa(id) {
-    setTarefas((tarefasAtuais) =>
-      tarefasAtuais.filter((tarefa) => tarefa.id !== id)
-    );
 
-    setTarefaParaExcluir(null);
 
-    mostrarMensagemSucesso("Tarefa excluída com sucesso.");
+  async function excluirTarefa(id) {
+    try {
+      await excluirTarefaApi(id);
+
+      setTarefas((tarefasAtuais) =>
+        tarefasAtuais.filter((tarefa) => tarefa.id !== id)
+      );
+
+      setTarefaParaExcluir(null);
+
+      mostrarMensagemSucesso(
+        "Tarefa excluída com sucesso."
+      );
+    } catch (erro) {
+      console.error("Erro ao excluir tarefa:", erro);
+
+      mostrarMensagemErro(
+        erro.message || "Não foi possível excluir a tarefa."
+      );
+    }
   }
+
+
   function solicitarExclusao(tarefa) {
   setTarefaParaExcluir(tarefa);
   }
