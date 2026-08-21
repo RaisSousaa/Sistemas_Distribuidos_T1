@@ -6,35 +6,36 @@ function Login({ aoCadastrar }) {
   const [senha, setSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [erro, setErro] = useState("");
-
+  const [carregando, setCarregando] = useState(false);
+  
     async function handleSubmit(evento) {
-        evento.preventDefault();
+      evento.preventDefault();
 
-        setErro("");
+      setErro("");
+      setCarregando(true);
 
-        if (!email.trim() || !senha.trim()) {
-            setErro("Preencha o e-mail e a senha.");
-            return;
+      if (!email.trim() || !senha.trim()) {
+        setErro("Preencha o e-mail e a senha.");
+        setCarregando(false);
+        return;
+      }
+
+      try {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password: senha,
+        });
+
+        if (error) {
+          throw error;
         }
+      } catch (error) {
+        console.error(error);
 
-        try {
-            const { error } =
-            await supabase.auth.signInWithPassword({
-                email: email,
-                password: senha,
-            });
-
-            if (error) {
-            throw error;
-            }
-
-        } catch (error) {
-            console.error(error);
-
-            setErro(
-            "E-mail ou senha inválidos."
-            );
-        }
+        setErro("E-mail ou senha inválidos.");
+      } finally {
+        setCarregando(false);
+      }
     }
 
   return (
@@ -76,6 +77,7 @@ function Login({ aoCadastrar }) {
               }
               placeholder="seu@email.com"
               required
+              disabled={carregando}
             />
           </div>
 
@@ -92,6 +94,7 @@ function Login({ aoCadastrar }) {
                 }
                 placeholder="Digite sua senha"
                 required
+                disabled={carregando}
               />
 
               <button
@@ -109,8 +112,16 @@ function Login({ aoCadastrar }) {
           <button
             type="submit"
             className="botao-login"
+            disabled={carregando}
           >
-            Entrar
+            {carregando ? (
+              <>
+                <span className="spinner"></span>
+                Entrando...
+              </>
+            ) : (
+              "Entrar"
+            )}
           </button>
         </form>
 
