@@ -854,3 +854,16 @@ button {
     transform: rotate(360deg);
   }
 }
+
+.botao-criar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.botao-criar:disabled,
+.botao-cancelar:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

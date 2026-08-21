@@ -5,6 +5,7 @@ function TarefaForm({
   aoCriar,
   aoEditar,
   tarefaInicial,
+  carregando,
 }) {
   const [titulo, setTitulo] = useState(
     tarefaInicial?.titulo || ""
@@ -73,6 +74,7 @@ function TarefaForm({
           placeholder="Descreva brevemente a tarefa..."
           rows="4"
           required
+          disabled={carregando}
         />
       </div>
 
@@ -86,6 +88,7 @@ function TarefaForm({
             value={dataLimite}
             onChange={(evento) => setDataLimite(evento.target.value)}
             required
+            disabled={carregando}
           />
         </div>
 
@@ -96,6 +99,7 @@ function TarefaForm({
             id="prioridade"
             value={prioridade}
             onChange={(evento) => setPrioridade(evento.target.value)}
+            disabled={carregando}
           >
             <option value="baixa">Baixa</option>
             <option value="media">Média</option>
@@ -123,6 +127,7 @@ function TarefaForm({
           type="button"
           className="botao-cancelar"
           onClick={aoCancelar}
+          disabled={carregando}
         >
           Cancelar
         </button>
@@ -130,8 +135,16 @@ function TarefaForm({
         <button
           type="submit"
           className="botao-criar"
+          disabled={carregando}
         >
-            {tarefaInicial ? "Salvar alterações" : "Criar tarefa"}
+          {carregando ? (
+            <>
+              <span className="spinner"></span>
+              {tarefaInicial ? "Salvando..." : "Criando..."}
+            </>
+          ) : (
+            tarefaInicial ? "Salvar alterações" : "Criar tarefa"
+          )}
         </button>
       </div>
     </form>

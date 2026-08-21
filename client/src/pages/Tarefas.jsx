@@ -20,6 +20,8 @@ function Tarefas({ usuario }) {
   const [tarefaParaExcluir, setTarefaParaExcluir] = useState(null);
   const [mensagemSucesso, setMensagemSucesso] = useState("");
   const [mensagemErro, setMensagemErro] = useState("");
+  const [salvandoTarefa, setSalvandoTarefa] = useState(false);
+
 
   useEffect(() => {
     async function carregarTarefas() {
@@ -46,6 +48,8 @@ function Tarefas({ usuario }) {
 
   async function adicionarTarefa(novaTarefa) {
     try {
+      setSalvandoTarefa(true);
+
       const tarefaCriada = await criarTarefa(novaTarefa);
 
       setTarefas((tarefasAtuais) => [
@@ -64,6 +68,8 @@ function Tarefas({ usuario }) {
       mostrarMensagemErro(
         erro.message || "Não foi possível criar a tarefa."
       );
+    } finally {
+      setSalvandoTarefa(false);
     }
   }
 
@@ -74,18 +80,20 @@ function Tarefas({ usuario }) {
 
   async function editarTarefa(tarefaAtualizada) {
     try {
-      const dadosAtualizacao = {
-      titulo: tarefaAtualizada.titulo,
-      descricao: tarefaAtualizada.descricao,
-      data_limite: tarefaAtualizada.data_limite,
-      prioridade: tarefaAtualizada.prioridade,
-      status: tarefaAtualizada.status,
-    };
+      setSalvandoTarefa(true);
 
-    const tarefaSalva = await atualizarTarefa(
-      tarefaAtualizada.id,
-      dadosAtualizacao
-    );
+      const dadosAtualizacao = {
+        titulo: tarefaAtualizada.titulo,
+        descricao: tarefaAtualizada.descricao,
+        data_limite: tarefaAtualizada.data_limite,
+        prioridade: tarefaAtualizada.prioridade,
+        status: tarefaAtualizada.status,
+      };
+
+      const tarefaSalva = await atualizarTarefa(
+        tarefaAtualizada.id,
+        dadosAtualizacao
+      );
 
       setTarefas((tarefasAtuais) =>
         tarefasAtuais.map((tarefa) =>
@@ -107,6 +115,8 @@ function Tarefas({ usuario }) {
       mostrarMensagemErro(
         erro.message || "Não foi possível atualizar a tarefa."
       );
+    } finally {
+      setSalvandoTarefa(false);
     }
   }
 
@@ -237,6 +247,7 @@ function Tarefas({ usuario }) {
         >
           <TarefaForm
             tarefaInicial={tarefaEmEdicao}
+            carregando={salvandoTarefa}
             aoCancelar={() => {
               setModalAberto(false);
               setTarefaEmEdicao(null);

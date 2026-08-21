@@ -7,6 +7,7 @@ function Login({ aoCadastrar }) {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
+  const [salvandoTarefa, setSalvandoTarefa] = useState(false);
   
     async function handleSubmit(evento) {
       evento.preventDefault();
