@@ -48,6 +48,26 @@ Sistemas_Distribuidos_T1/
 - Mensagens de sucesso e erro
 - Estado vazio quando não existem tarefas
 
+## Telas da Aplicação
+
+### Tela de Login
+![Tela de login](docs/telalogin.png)
+
+### Tela de Cadastro
+![Tela de login](docs/telacadastro.png)
+
+### Listagem de Tarefas
+![Dashboard de Tarefas](docs/telatarefas.png)
+
+### Editar Tarefa
+![Modal de Tarefas](docs/editar.png)
+
+### Criação de Tarefas
+![Modal de Tarefas](docs/criar.png)
+
+### Excluir
+![Modal de Tarefas](docs/excluir.png)
+
 ## Arquitetura
 
 O frontend React utiliza o Supabase Auth para autenticação dos usuários.
@@ -179,14 +199,52 @@ Principais endpoints:
 
 Todos os endpoints de tarefas exigem autenticação.
 
-## Testes
+## Testes do Backend
 
-Para executar os testes do backend:
+### Como Instalar Dependências e Executar
 
-```bash
-cd server
-pytest -q
-```
+1. Certifique-se de estar com o ambiente virtual ativo na pasta `server/`:
+   ```bash
+   cd server
+   source venv/bin/activate  # No Linux/macOS
+   # .\venv\Scripts\Activate.ps1  # No Windows
+   pip install -r requirements.txt
+
+para executar: pytest -v
+
+Resultado dos testes
+
+============================= test session starts ==============================
+rootdir: /home/rais/Documentos/SD/Sistemas_Distribuidos_T1-integration-fullstack/server
+configfile: pyproject.toml
+plugins: anyio-4.8.0
+collected 7 items
+
+tests/test_auth.py::test_acesso_sem_token_deve_falhar PASSED            [ 14%]
+tests/test_auth.py::test_acesso_token_invalido_deve_falhar PASSED       [ 28%]
+tests/test_tarefas.py::test_criar_tarefa_sucesso PASSED                 [ 42%]
+tests/test_tarefas.py::test_criar_tarefa_dados_invalidos PASSED         [ 57%]
+tests/test_tarefas.py::test_listar_tarefas PASSED                       [ 71%]
+tests/test_tarefas.py::test_atualizar_tarefa PASSED                     [ 85%]
+tests/test_tarefas.py::test_deletar_tarefa PASSED                       [100%]
+
+============================== 7 passed in 0.42s ===============================
+
+### Descrição dos Grupos de Testes
+
+- **Grupo 1: Autenticação e Autorização (`tests/test_auth.py`)**[cite: 5]
+  - **Objetivo:** Validar a proteção dos endpoints e a integridade da autenticação por Bearer Token[cite: 2, 4].
+  - `test_acesso_sem_token_deve_falhar`: Garante que chamadas sem token sejam bloqueadas com status `401 Unauthorized`[cite: 2, 5].
+  - `test_acesso_token_invalido_deve_falhar`: Garante que tokens falsificados ou expirados sejam rejeitados com status `401 Unauthorized`[cite: 2, 5].
+
+- **Grupo 2: Operações CRUD de Tarefas (`tests/test_tarefas.py`)**[cite: 5]
+  - **Objetivo:** Validar persistência, validação de payload, regras de negócio e isolamento de dados por usuário[cite: 2, 4].
+  - `test_criar_tarefa_sucesso`: Valida a criação via `POST /api/tarefas` retornando `201 Created` e os dados persistidos[cite: 2, 5].
+  - `test_criar_tarefa_dados_invalidos`: Valida a rejeição de dados incorretos com status `422 Unprocessable Entity`[cite: 2, 5].
+  - `test_listar_tarefas`: Valida a listagem via `GET /api/tarefas` retornando `200 OK` apenas com registros do usuário[cite: 2, 4, 5].
+  - `test_atualizar_tarefa`: Valida a alteração seletiva via `PATCH /api/tarefas/{id}` retornando `200 OK`[cite: 2, 5].
+  - `test_deletar_tarefa`: Valida a exclusão via `DELETE /api/tarefas/{id}` retornando `204 No Content` e confirmando que a busca seguinte retorna `404 Not Found`[cite: 2, 5].
+```[cite: 5]
 
 ## Build do Frontend
 
@@ -238,6 +296,9 @@ Persistência
     
     ↓
 Shttps://github.com/RaisSousaa/Sistemas_Distribuidos_T1/pull/3/conflict?name=README.md&base_oid=3d6ecc02b84660aeba656b99407c035ef0777ebb&head_oid=75d50160549b300fdae48dfcbcf55fe1c0a66976upabase PostgreSQL
+
+
+
 
 ## Conceitos de Sistemas Distribuídos - Monitoria
 
